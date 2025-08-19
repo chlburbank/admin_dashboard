@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -19,16 +19,16 @@ import { CustomSidenavComponent } from "./components/custom-sidenav/custom-siden
     MatSidenav,
     MatSidenavContent, CustomSidenavComponent],
   template: `
-    <mat-toolbar color="primary" class="mat-elevation-z3">
-    <button mat-icon-button>
+    <mat-toolbar class="mat-elevation-z3 custom-toolbar">
+    <button mat-icon-button (click)="collapsed.set(!collapsed())">
       <mat-icon>menu</mat-icon>
     </button>
   </mat-toolbar>
   <mat-sidenav-container>
-    <mat-sidenav opened mode="side" [style.width]="'250px'">
-      <app-custom-sidenav></app-custom-sidenav>
+    <mat-sidenav opened mode="side" [style.width]="sidenavWidth()">
+      <app-custom-sidenav [collapsed]="collapsed()"></app-custom-sidenav>
     </mat-sidenav>
-    <mat-sidenav-content class="content">
+    <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
@@ -50,4 +50,8 @@ import { CustomSidenavComponent } from "./components/custom-sidenav/custom-siden
 })
 export class AppComponent {
   title = 'admin_dashboard';
+
+  collapsed = signal(false);
+  
+  sidenavWidth = computed(() => this.collapsed() ? '65px' : '250px');
 }
