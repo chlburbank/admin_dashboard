@@ -27,19 +27,28 @@ export type MenuItem = {
     <mat-nav-list>
       <a 
       mat-list-item 
+      class='menu-item'
       *ngFor="let item of menuItems()" 
       [routerLink]="item.route"
-      routerLinkActive
+      routerLinkActive = 'selected-menu-item'
       #rla="routerLinkActive"
       [activated]="rla.isActive"
       >
-        <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
+        <mat-icon [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'"  matListItemIcon>{{item.icon}}</mat-icon>
         <span matListItemTitle *ngIf="!sideNavCollapsed()">{{item.label}}</span>
       </a>
     </mat-nav-list>
   `,
   styles: `
   
+  :host * {
+    transition: all 500ms ease-in-out;
+  }
+
+  .hide-header-text {
+    display: none;
+  }
+
   .sidenav-header {
       text-align: center;
       padding-top: 24px;
@@ -53,6 +62,9 @@ export type MenuItem = {
     
   
     .header-text {
+
+      height: 3rem;
+
       > h2 {
         margin: 0;
         font-size: 1rem;
@@ -67,7 +79,18 @@ export type MenuItem = {
     
     .hide-header-text{
       opacity:0;
-      height: 0;
+      height: 0 !important;
+    }
+
+    .menu-item {
+      border-left: 5px solid;
+      border-left-color: rgba(0, 0, 0, 0.05);
+      
+    }
+
+    .selected-menu-item {
+      border-left: 5px solid blue;
+      border-radius: 0 !important
     }
   `
 })
@@ -87,7 +110,7 @@ export class CustomSidenavComponent {
       route: 'dashboard'
     },
     {
-      icon: 'video_library',
+      icon: 'video_library', 
       label: 'Content',
       route: 'content'
     },

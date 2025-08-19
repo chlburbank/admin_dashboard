@@ -46,12 +46,17 @@ import { CustomSidenavComponent } from "./components/custom-sidenav/custom-siden
     mat-sidenav-container {
       height: calc(100vh - 64px);
     }
+
+    mat-sidenav, mat-sidenav-content {
+      transition: all 500ms ease-in-out;
+}
+
     `],
 })
 export class AppComponent {
   title = 'admin_dashboard';
 
   collapsed = signal(false);
-  
+
   sidenavWidth = computed(() => this.collapsed() ? '65px' : '250px');
 }
