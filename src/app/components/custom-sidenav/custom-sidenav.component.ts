@@ -4,17 +4,19 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterModule } from '@angular/router';
 import { RouterLinkActive } from "@angular/router";
+import { MenuItemComponent } from "../menu-item/menu-item.component";
 
 export type MenuItem = {
   icon: string;
   label: string;
   route: string;
+  subItems?: MenuItem[];
 }
 
 @Component({
   selector: 'app-custom-sidenav',
   standalone: true,
-  imports: [CommonModule, MatListModule, MatIconModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, MatListModule, MatIconModule, MenuItemComponent],
   template: `
     <div class="sidenav-header">
       <img [width]="profilePicSize()" [height]="profilePicSize()" src="assets/pfp.jpg" alt="pfp.jpg">
@@ -25,18 +27,9 @@ export type MenuItem = {
     </div>
 
     <mat-nav-list>
-      <a 
-      mat-list-item 
-      class='menu-item'
-      *ngFor="let item of menuItems()" 
-      [routerLink]="item.route"
-      routerLinkActive = 'selected-menu-item'
-      #rla="routerLinkActive"
-      [activated]="rla.isActive"
-      >
-        <mat-icon [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'"  matListItemIcon>{{item.icon}}</mat-icon>
-        <span matListItemTitle *ngIf="!sideNavCollapsed()">{{item.label}}</span>
-      </a>
+      @for (item of menuItems(); track item.label) {
+        <app-menu-item [item]="item" [collapsed]="sideNavCollapsed()" />
+      }
     </mat-nav-list>
   `,
   styles: `
@@ -82,16 +75,7 @@ export type MenuItem = {
       height: 0 !important;
     }
 
-    .menu-item {
-      border-left: 5px solid;
-      border-left-color: rgba(0, 0, 0, 0.05);
-      
-    }
-
-    .selected-menu-item {
-      border-left: 5px solid blue;
-      border-radius: 0 !important
-    }
+    
   `
 })
 export class CustomSidenavComponent {
@@ -112,7 +96,12 @@ export class CustomSidenavComponent {
     {
       icon: 'video_library', 
       label: 'Content',
-      route: 'content'
+      route: 'content',
+      subItems: [
+        { icon: 'play_circle', label: 'Videos', route: 'videos' },
+        { icon: 'playlist_play', label: 'Playlist', route: 'playlist' },
+        { icon: 'post_add', label: 'Posts', route: 'posts' }
+      ]
     },
     {
       icon: 'analytics',

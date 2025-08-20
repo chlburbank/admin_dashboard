@@ -3,6 +3,9 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ContentComponent } from './pages/content/content.component';
 import { AnalyticsComponent } from './pages/analytics/analytics.component';
 import { CommentsComponent } from './pages/comments/comments.component';
+import { VideosComponent } from './pages/content/videos/videos.component';
+import { PlaylistComponent } from './pages/content/playlist/playlist.component';
+import { PostsComponent } from './pages/content/posts/posts.component';
 
 export const routes: Routes = [
     {
@@ -17,6 +20,20 @@ export const routes: Routes = [
     {
         path:'content',
         component: ContentComponent,
+        children: [
+            {
+                path: 'videos',
+                component: VideosComponent,
+            },
+            {
+                path: 'playlist',
+                component: PlaylistComponent,
+            },
+            {
+                path: 'posts',
+                component: PostsComponent,
+            }
+        ]
     },
     {
         path:'analytics',
